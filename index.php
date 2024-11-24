@@ -1,6 +1,11 @@
 <?php
     session_start();
-    require ("includes/helper.php");
+    require ("./Model/Database.php");
+    require ("./Includes/helper.php");
+    require("./Controller/PostController.php");
+    require("./Controller/UserController.php");
+    require("./Controller/LoginController.php");
+
     if(isset($_GET['deconnect'])) {
         session_destroy();
         header("Location: index.php");
@@ -20,17 +25,27 @@
             <?php
                 if(!empty($_SESSION['auth'])) {
                 require "_partials/_navbar.php";
-                    $componentName = !empty($_GET['component'])
-                    ? htmlspecialchars($_GET['component'], ENT_QUOTES, 'UTF-8')
-                    : 'users';
+                    $controlerName = !empty($_GET['component'])
+                    ? ucfirst(htmlspecialchars($_GET['component'], ENT_QUOTES, 'UTF-8')) . "Controller"
+                    : 'UserController';
 
-                    if (file_exists("controller/$componentName.php")) {
-                        require "controller/$componentName.php";
+                    $actionName = !empty($_GET['action'])
+                        ? htmlspecialchars($_GET['action'], ENT_QUOTES, 'UTF-8')
+                        : 'list';
+
+                    $subjectId = !empty($_GET['id'])
+                        ? htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')
+                        : null;
+
+                    if (class_exists($controlerName)) {
+                        $controller = new $controlerName();
+                        $controller->$actionName($subjectId);
                     } else {
-                        throw new Exception("Component '$componentName' does not exist");
+                        throw new Exception("Class '$controlerName' does not exist");
                     }
                 } else {
-                    require "controller/login.php";
+                    $loginController = new LoginController();
+                    $loginController->login();
                 }
             ?>
         </div>

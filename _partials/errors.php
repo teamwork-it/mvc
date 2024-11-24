@@ -1,6 +1,6 @@
 <?php
-if(!empty($errors)) :
-    foreach($errors as $error) :
+if(!empty($this->errors)) :
+    foreach($this->errors as $error) :
         ?>
         <div class="alert alert-danger" role="alert">
             <?php echo $error; ?>

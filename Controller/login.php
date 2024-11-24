@@ -1,5 +1,5 @@
 <?php
-require("model/login.php");
+require("Model/login.php");
 
 if(isset($_POST['valid_login'])) {
     $errors = [];
@@ -25,4 +25,4 @@ if(isset($_POST['valid_login'])) {
 
 }
 
-require("view/login.php");
+require("View/login.php");
